@@ -5,18 +5,23 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'c23761c3a31dc627ea1e638644ad7083'
 
 
-@app.route("/", methods=['GET', '_POST_'])
+@app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash(f'_Account created for {form.email.data}!_', 'success')
+        flash(f'Account created for {form.email.data}!', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    if form.validate_on_submit():
+        if form.email.data == 'pravinaacharya@gmail.com' and form.password.data == '123':
+            flash('Logged in successfully!', 'success')
+        else:
+            flash('Login Unsuccessful. Please check email.id and password', 'danger')
     return render_template('login.html', title='Log In', form=form)
 
 
