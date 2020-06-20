@@ -11,7 +11,7 @@
     {% if title %}
         <title>{{ title }}</title>
     {% else %}
-        <title>Page</title>
+        <title>Chat Application</title>
     {% endif %}
   </head>
   <body>
@@ -40,7 +40,7 @@
         </div>
       </nav>
     </header>
-    <div class="container">
+    <div role="main" class="container">
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
           {% for category, message in messages %}

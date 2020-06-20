@@ -1,19 +1,39 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div id ="main-section">
-        <div id = "display-message-section">
-        </div>
-        <div id="input- area" class="input-group mb-3">
-            <input type="text" id="input_msg" class="form-control" placeholder="Message" aria-label="Message">
-            <div class="input-group-append">
-                <button class="btn btn-success" type="submit" id="sendButton">Send</button>
+    {% for msg in msgs %}
+        <article class="media content-section">
+          <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + msg.sender.image_file) }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">{{ msg.sender.firstName }}</a>
+              <small class="text-muted">{{ msg.date_send.strftime('%H:%M:%S') }}</small>
             </div>
-        </div>
+            <p class="article-content">{{ msg.message }}</p>
+          </div>
+        </article>
+    {% endfor %}
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {{ form.message.label(class="form-control-label") }}
+                    {% if form.message.errors %}
+                        {{ form.message(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.message.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.message(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
     </div>
-    <span id="get-username">{{ name }}</span>
-
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-
-    <script src="{{ url_for('static', filename='scripts/socketio.js') }}"></script>
 
 {% endblock content %}

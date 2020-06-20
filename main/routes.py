@@ -1,13 +1,14 @@
 from flask import render_template, url_for, flash, redirect, request
 from main import app, db, bcrypt, socketio
-from main.form import RegistrationForm, LoginForm, UpdateForm
-from main.models import User
+from main.form import RegistrationForm, LoginForm, UpdateForm, MessageForm
+from main.models import User, Message
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_socketio import send
 import time
 from PIL import Image
 import secrets
 import os
+
 
 @app.route("/")
 @app.route("/home")
@@ -32,8 +33,8 @@ def register():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
+    # if current_user.is_authenticated:
+    #     return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -57,7 +58,14 @@ def logout():
 @app.route("/chat", methods=['GET', 'POST'])
 @login_required
 def chat():
-    return render_template('chat.html', title='Chat', name = current_user.firstName)
+    msgs = Message.query.all()
+    form = MessageForm()
+    if form.validate_on_submit():
+        post = Message(message=form.message.data, sender=current_user)
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for('chat'))
+    return render_template('chat.html', title='Chat', form=form, msgs=msgs)
 
 
 def save_picture(form_picture):
@@ -92,14 +100,14 @@ def account():
         form.firstName.data = current_user.firstName
         form.lastName.data = current_user.lastName
         form.email.data = current_user.email
-    image_file = url_for('static', filename = 'profile_pics/' + current_user.image_file)
-    return render_template('account.html', title='Account', form = form, image_file=image_file)
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    return render_template('account.html', title='Account', form=form, image_file=image_file)
 
 
-@socketio.on('incoming-msg')
-def on_message(data):
-    msg = data["msg"]
-    name = data["username"]
-
-    time_stamp = time.strftime('%b-%d %I:%M%p', time.localtime())
-    send({"username": name, "msg": msg, "time_stamp": time_stamp})
+# @socketio.on('incoming-msg')
+# def on_message(data):
+#     msg = data["msg"]
+#     name = data["username"]
+#
+#     time_stamp = time.strftime('%b-%d %I:%M%p', time.localtime())
+#     send({"username": name, "msg": msg, "time_stamp": time_stamp})
