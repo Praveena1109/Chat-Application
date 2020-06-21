@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="content-section">
+    <div class="media">
+      <img class="rounded-circle account-img" src="{{ url_for('static', filename='profile_pics/' + post.sender.image_file) }}">
+      <div class="media-body">
+        <h2 class="account-heading">{{ post.sender.firstName + " " +post.sender.lastName}}</h2>
+        <p class="text-secondary">{{ post.sender.intro }}</p>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

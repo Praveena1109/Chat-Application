@@ -41,7 +41,7 @@ class UpdateForm(FlaskForm):
     email = StringField('Email Address',
                         validators=[DataRequired(), Email()])
     picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
-    
+    intro = TextAreaField('Tell us something about yourself..')
     submit = SubmitField('Update')
 
     def validate_email(self, email):
@@ -51,6 +51,25 @@ class UpdateForm(FlaskForm):
                 raise ValidationError('This Email ID already has an account')
 
 
-class MessageForm(FlaskForm):
-    message = TextAreaField('Message', validators=[DataRequired()])
-    submit = SubmitField('Send')
+class PostForm(FlaskForm):
+    title = TextAreaField('Title', validators=[DataRequired()])
+    information = TextAreaField('Information', validators=[DataRequired()])
+    submit = SubmitField('Post')
+
+
+class RequestResetForm(FlaskForm):
+    email = StringField('Email Address',
+                        validators=[DataRequired(), Email()])
+    submit = SubmitField('Request password reset')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user is None:
+            raise ValidationError('This email id does not have an account')
+
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('New Password', validators=[DataRequired()])
+    confirmPassword = PasswordField('Confirm New Password',
+                                    validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')
