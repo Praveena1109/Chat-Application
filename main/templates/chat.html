@@ -23,9 +23,9 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
-              <a class="nav-item nav-link" href="{{ url_for('new_post') }}">Posts</a>
-              <a class="nav-item nav-link" href="{{ url_for('chat') }}">Chat</a>
+                <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+                <a class="nav-item nav-link" href="{{ url_for('new_post') }}">Posts</a>
+                <a class="nav-item nav-link" href="{{ url_for('chat') }}">Chat</a>
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
@@ -41,20 +41,33 @@
         </div>
       </nav>
     </header>
-    <div role="main" class="container">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          {% for category, message in messages %}
-            <div class="alert alert-{{ category }}">
-              {{ message }}
+    <div id="main-section">
+        <nav id="sidebar">
+            <h4>ROOMS</h4>
+            {% for room in rooms %}
+                <p class="select-room">{{ room|title }}</p>
+            {% endfor %}
+        </nav>
+
+        <div id="right-side-pannel">
+            <div id="display-message-section">
             </div>
-          {% endfor %}
-        {% endif %}
-      {% endwith %}
+            <div id="input-area">
+                <input type="text" id="user-message" placeholder="Type here..." autocomplete="off">
+                <button type="button" id="send_message">Send</button>
+            </div>
+        </div>
     </div>
-    <div class="container pt-3 my-3 border">
-    {% block content %}{% endblock %}
-    </div>
+    <script type="text/javascript">
+        const name = `{{ name }}`;
+    </script>
+    <!-- SocketIO JS -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <!-- Custom SocketIO JS -->
+    <script src="{{ url_for('static', filename='scripts/socketio.js') }}">
+    </script>
+<!--    <script src="{{ url_for('static', filename='scripts/chat.js') }}">-->
+<!--    </script>-->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

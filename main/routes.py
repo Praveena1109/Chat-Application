@@ -3,8 +3,8 @@ from main import app, db, bcrypt, socketio, mail
 from main.form import RegistrationForm, LoginForm, UpdateForm, PostForm, RequestResetForm, ResetPasswordForm
 from main.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
-from flask_socketio import emit
-import time
+from flask_socketio import emit, send, join_room, leave_room
+from time import strftime, localtime
 from PIL import Image
 import secrets
 import os
@@ -14,7 +14,7 @@ from flask_mail import Message
 @app.route("/")
 @app.route("/home")
 def home():
-    posts = Post.query.all()
+    posts = Post.query.order_by(Post.date_send.desc()).paginate()
     return render_template('home.html', title='Home', posts=posts)
 
 
@@ -68,7 +68,7 @@ If you did not made this request then simply ignore this email and no changes wi
     mail.send(msg)
 
 
-@app.route("/reset_request")
+@app.route("/reset_request",  methods=['GET', 'POST'])
 def request_reset():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
@@ -81,7 +81,7 @@ def request_reset():
     return render_template('request_reset.html', title='reset password', form=form)
 
 
-@app.route("/resent_password/<token>")
+@app.route("/resent_password/<token>",  methods=['GET', 'POST'])
 def reset_password(token):
     if current_user.is_authenticated:
         return redirect(url_for('home'))
@@ -193,7 +193,31 @@ def info(post_id):
     post = Post.query.get_or_404(post_id)
     return render_template('information.html', title='Information', post=post)
 
-# @socketio.on('my event')
-# def handle_my_custom_event(json):
-#     print('received my event: ' + str(json))
-#     socketio.emit('my response', json)
+
+ROOMS = ['1', '2', '3', '4']
+
+
+@app.route("/chat", methods=['GET', 'POST'])
+@login_required
+def chat():
+    return render_template('chat.html', title='Chat', name=current_user.firstName, rooms=ROOMS)
+
+
+@socketio.on('message')
+def message(data):
+    print(f"\n\n{data}\n\n")
+    send({'msg': data['msg'], 'name': data['name'], 'sent_time': strftime('%H:%M %d/%m/%y', localtime())},
+         room=data['room'])
+
+
+@socketio.on('join')
+def join(data):
+    join_room(data['room'])
+    send({'msg': data['name'] + " has joined the " + data['room'] + " room!"}, room=data['room'])
+
+
+@socketio.on('leave')
+def leave(data):
+    leave_room(data['room'])
+    send({'msg': data['name'] + " has left the " + data['room'] + " room!"}, room=data['room'])
+
