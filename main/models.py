@@ -18,6 +18,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     intro = db.Column(db.String(100), default='-')
     posts = db.relationship('Post', backref='sender', lazy=True)
+    rooms = db.relationship('Room', backref='creator', lazy=True)
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(app.config['SECRET_KEY'], expires_sec)
@@ -46,4 +47,16 @@ class Post(db.Model):
 
     def __repr__(self):
         return f"Post('{self.title}','{self.information}', '{self.date_send}')"
+
+
+class Room(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    room_name = db.Column(db.String(100), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return f"Room('{self.room_name}')"
+
+
 

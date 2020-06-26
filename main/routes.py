@@ -1,7 +1,8 @@
 from flask import render_template, url_for, flash, redirect, request, abort
 from main import app, db, bcrypt, socketio, mail
-from main.form import RegistrationForm, LoginForm, UpdateForm, PostForm, RequestResetForm, ResetPasswordForm
-from main.models import User, Post
+from main.form import RegistrationForm, LoginForm, UpdateForm, PostForm, RequestResetForm, ResetPasswordForm, \
+    CreateRoomForm
+from main.models import User, Post, Room
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_socketio import emit, send, join_room, leave_room
 from time import strftime, localtime
@@ -194,18 +195,44 @@ def info(post_id):
     return render_template('information.html', title='Information', post=post)
 
 
-ROOMS = ['1', '2', '3', '4']
-
-
 @app.route("/chat", methods=['GET', 'POST'])
 @login_required
 def chat():
-    return render_template('chat.html', title='Chat', name=current_user.firstName, rooms=ROOMS)
+    form = CreateRoomForm()
+    if form.validate_on_submit():
+        new_room = Room(room_name=form.room_name.data, creator=current_user)
+        db.session.add(new_room)
+        db.session.commit()
+        flash('Created new room', 'success')
+        return redirect(url_for('chat'))
+    rooms = Room.query.all()
+    return render_template('chat.html', title='Chat', name=current_user.firstName, rooms=rooms, form=form)
+
+
+# @app.route("/create_room", methods=['GET', 'POST'])
+# @login_required
+# def create_room():
+#     form = CreateRoomForm()
+#     if form.validate_on_submit():
+#         # user = Room.query.filter_by(member=form.email.data).first()
+#         # if user:
+#         #     flash('User already in the room', 'warning')
+#         # else:
+#         user = Room.query.filter_by(room_name=form.room_name.data).first()
+#         if user is None:
+#             new_room = Room(room_name=form.room_name.data, creator=current_user)
+#             db.session.add(new_room)
+#             db.session.commit()
+#             ROOMS.append(form.room_name.data)
+#             flash('Created new room', 'success')
+#             return redirect(url_for('chat'))
+#         else:
+#             flash('Room already exist', 'warning')
+#     return render_template('create_room.html', title='Chat', form=form)
 
 
 @socketio.on('message')
 def message(data):
-    print(f"\n\n{data}\n\n")
     send({'msg': data['msg'], 'name': data['name'], 'sent_time': strftime('%H:%M %d/%m/%y', localtime())},
          room=data['room'])
 
@@ -213,7 +240,8 @@ def message(data):
 @socketio.on('join')
 def join(data):
     join_room(data['room'])
-    send({'msg': data['name'] + " has joined the " + data['room'] + " room!"}, room=data['room'])
+    room = data['room']
+    send({'msg': data['name'] + " has joined the " + data['room'] + " room!"}, room=room)
 
 
 @socketio.on('leave')

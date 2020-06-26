@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='chat.css') }}">
     {% if title %}
         <title>{{ title }}</title>
     {% else %}
@@ -41,33 +42,75 @@
         </div>
       </nav>
     </header>
-    <div id="main-section">
-        <nav id="sidebar">
-            <h4>ROOMS</h4>
-            {% for room in rooms %}
-                <p class="select-room">{{ room|title }}</p>
-            {% endfor %}
-        </nav>
+    <div class="wrapper">
+            <div id="main-section">
+                <nav id="sidebar">
+                    <h4>ROOMS</h4>
+                    {% for room in rooms %}
+                        <p class="select-room cursor-pointer">{{ room.room_name|title }}</p>
+                    {% endfor %}
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-info btn-sm m-1" data-toggle="modal" data-target="#modalLoginForm">Create Room</button>
+<!--                        <button type="button" class="btn btn-info btn-sm m-1" data-toggle="modal" data-target="#">Add Member</button>-->
+<!--                        <button type="button" class="btn btn-info btn-sm m-1" data-toggle="modal" data-target="#">Delete Room</button>-->
+<!--                        <button type="button" class="btn btn-info btn-sm m-1" data-toggle="modal" data-target="#">Members</button>-->
+                    </div>
+                    <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                      aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header text-center">
+                            <h4 class="modal-title w-100 font-weight-bold">Create Room</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="content-section">
+                                <form method="POST" action="">
+                                    {{ form.hidden_tag() }}
+                                    <fieldset class="form-group">
+                                        <div class="form-group">
+                                            {{ form.room_name.label(class="form-control-label") }}
+                                            {% if form.room_name.errors %}
+                                                {{ form.room_name(class="form-control form-control-lg is-invalid") }}
+                                                <div class="invalid-feedback">
+                                                    {% for error in form.room_name.errors %}
+                                                        <span>{{ error }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %}
+                                                {{ form.room_name(class="form-control form-control-lg") }}
+                                            {% endif %}
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-group">
+                                        {{ form.submit(class="btn btn-outline-info") }}
+                                    </div>
+                                </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </nav>
 
-        <div id="right-side-pannel">
-            <div id="display-message-section">
+                <div id="right-side-pannel">
+                    <div id="display-message-section">
+                    </div>
+                    <div id="input-area" class="input-group mb-3">
+                        <input type="text" class="form-control" id="user-message" placeholder="Type here..." autocomplete="off" aria-label="Type a message" aria-describedby="basic-addon2">
+                        <div>
+                            <button type="button" id="send_message" class="btn btn-success btn-secondary float-right">Send<i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div id="input-area">
-                <input type="text" id="user-message" placeholder="Type here..." autocomplete="off">
-                <button type="button" id="send_message">Send</button>
-            </div>
-        </div>
     </div>
-    <script type="text/javascript">
-        const name = `{{ name }}`;
-    </script>
+    <span id="get-name">{{ name }}</span>
     <!-- SocketIO JS -->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
     <!-- Custom SocketIO JS -->
     <script src="{{ url_for('static', filename='scripts/socketio.js') }}">
     </script>
-<!--    <script src="{{ url_for('static', filename='scripts/chat.js') }}">-->
-<!--    </script>-->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
