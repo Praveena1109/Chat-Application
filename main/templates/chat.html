@@ -49,13 +49,13 @@
                     {% for room in rooms %}
                         <p class="select-room cursor-pointer">{{ room.room_name|title }}</p>
                     {% endfor %}
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-info btn-sm m-1" data-toggle="modal" data-target="#modalLoginForm">Create Room</button>
-<!--                        <button type="button" class="btn btn-info btn-sm m-1" data-toggle="modal" data-target="#">Add Member</button>-->
-<!--                        <button type="button" class="btn btn-info btn-sm m-1" data-toggle="modal" data-target="#">Delete Room</button>-->
-<!--                        <button type="button" class="btn btn-info btn-sm m-1" data-toggle="modal" data-target="#">Members</button>-->
+                    <div class="btn-group-vertical">
+                        <button type="button" class="btn btn-info btn-sm m-1" data-toggle="modal" data-target="#modalCreateRoom">Create Room</button>
+                        <button type="button" class="btn btn-info btn-sm m-1" data-toggle="modal" data-target="#">Add Member</button>
+                        <a class="btn btn-info btn-sm m-1" href="{{ url_for('delete_room')}}">Delete Room</a>
+                        <button type="button" class="btn btn-info btn-sm m-1" data-toggle="modal" data-target="#">Check Members</button>
                     </div>
-                    <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                    <div class="modal fade" id="modalCreateRoom" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                       aria-hidden="true">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">

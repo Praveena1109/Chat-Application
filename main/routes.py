@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, abort
 from main import app, db, bcrypt, socketio, mail
 from main.form import RegistrationForm, LoginForm, UpdateForm, PostForm, RequestResetForm, ResetPasswordForm, \
-    CreateRoomForm
+    CreateRoomForm, DeleteRoomForm
 from main.models import User, Post, Room
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_socketio import emit, send, join_room, leave_room
@@ -203,32 +203,24 @@ def chat():
         new_room = Room(room_name=form.room_name.data, creator=current_user)
         db.session.add(new_room)
         db.session.commit()
-        flash('Created new room', 'success')
         return redirect(url_for('chat'))
     rooms = Room.query.all()
     return render_template('chat.html', title='Chat', name=current_user.firstName, rooms=rooms, form=form)
 
 
-# @app.route("/create_room", methods=['GET', 'POST'])
-# @login_required
-# def create_room():
-#     form = CreateRoomForm()
-#     if form.validate_on_submit():
-#         # user = Room.query.filter_by(member=form.email.data).first()
-#         # if user:
-#         #     flash('User already in the room', 'warning')
-#         # else:
-#         user = Room.query.filter_by(room_name=form.room_name.data).first()
-#         if user is None:
-#             new_room = Room(room_name=form.room_name.data, creator=current_user)
-#             db.session.add(new_room)
-#             db.session.commit()
-#             ROOMS.append(form.room_name.data)
-#             flash('Created new room', 'success')
-#             return redirect(url_for('chat'))
-#         else:
-#             flash('Room already exist', 'warning')
-#     return render_template('create_room.html', title='Chat', form=form)
+@app.route("/delete_room", methods=['GET', 'POST'])
+@login_required
+def delete_room():
+    form = DeleteRoomForm()
+    if form.validate_on_submit():
+        old_room = Room.query.filter_by(room_name=form.room_name.data).first()
+        if old_room:
+            db.session.delete(old_room)
+            db.session.commit()
+            return redirect(url_for('chat'))
+        else:
+            flash('This room does not exist', 'warning')
+    return render_template('delete_room.html', title='Chat', form=form)
 
 
 @socketio.on('message')

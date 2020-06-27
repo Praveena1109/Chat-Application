@@ -78,3 +78,13 @@ class ResetPasswordForm(FlaskForm):
 class CreateRoomForm(FlaskForm):
     room_name = StringField('Room Name', validators=[DataRequired()])
     submit = SubmitField('Add')
+
+
+class DeleteRoomForm(FlaskForm):
+    room_name = StringField('Room Name', validators=[DataRequired()])
+    submit = SubmitField('Delete')
+
+    def validate_room(self, room_name):
+        room = Room.query.filter_by(room_name=room_name.data).first()
+        if room is None:
+            raise ValidationError('This room does not exist')
