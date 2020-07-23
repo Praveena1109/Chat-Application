@@ -2,7 +2,7 @@
     display: flex;
 }
 #main-section {
-    overflow: hidden; /* Makee this div contain its floated children */
+    overflow: hidden; /* Make this div contain its floated children */
     width: 100%;
 }
 
@@ -97,13 +97,13 @@ input[type=text]:focus{
 
 .others-msg {
     margin-right:7em;
-    margin-left: 1em;
+    margin-left: 1em;FFC107
     padding: 0.5em 0.5em 0.5em 1em;
     border-radius: 5px;
-    border-color: grey;
+    border-color: #B0AAA9;
     border-width: 0.5px;
     border-style: solid;
-    background-color: #C2DBFB;
+    background-color: #B0AAA9;
     /* animation */
     animation-name: fadeIn;
     animation-duration: 0.75s;
@@ -116,7 +116,7 @@ input[type=text]:focus{
     margin-right:1em;
     padding: 0.5em 0.5em 0.5em 1em;
     border-radius: 5px;
-    border-color: #206ED2;
+    border-color: ##000000;
     border-width: 1px;
     border-style: solid;
     /* animation */
@@ -142,19 +142,20 @@ input[type=text]:focus{
 .other-name {
     font-weight: bold;
     font-size: 1.1em;
-    color: #FF6B13;
+    color: #800080;
 }
 
 .my-name {
     font-size: 1.1em;
-    color: #FF6B13;
+    color: #800080;
 }
 
 #msg-input {
-    border-color: #ffc107;
+    border-color: #800080;
     border-width: 5px;
 }
 
 #get-name {
     display: none !important;
 }
+

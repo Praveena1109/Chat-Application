@@ -5,7 +5,13 @@
       <img class="rounded-circle account-img" src="{{ url_for('static', filename='profile_pics/' + post.sender.image_file) }}">
       <div class="media-body">
         <h2 class="account-heading">{{ post.sender.firstName + " " +post.sender.lastName}}</h2>
-        <p class="text-secondary">{{ post.sender.intro }}</p>
+        <p class="text-secondary">College : {{ post.sender.college }}</p>
+        {% if post.sender.work %}
+          <p class="text-secondary">Work : {{ post.sender.work }}</p>
+        {% endif %}
+        <p class="text-secondary">Email ID : {{ post.sender.email }}</p>
+        <p class="text-secondary">Mobile No. : {{ post.sender.phone }}</p>
+        <p class="text-secondary">Bio : {{ post.sender.intro }}</p>
       </div>
     </div>
   </div>

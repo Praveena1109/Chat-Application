@@ -1,19 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-<!--<center>-->
-<!--    <h2>CHAT APPLICATION</h2>-->
-<!--</center>-->
-    {% for post in posts.items %}
-        <article class="media content-section">
-          <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.sender.image_file) }}">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="{{ url_for('info', post_id=post.id) }}">{{ post.sender.firstName }}</a>
-              <small class="text-muted">{{ post.date_send.strftime('%H:%M:%S  %d-%m-%Y') }}</small>
-            </div>
-              <h4><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h4>
-            <p class="article-content">{{ post.information }}</p>
-          </div>
-        </article>
-    {% endfor %}
+<center>
+    <h2>CHAT APPLICATION</h2>
+</center>
 {% endblock content %}

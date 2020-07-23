@@ -17,6 +17,10 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(60), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     intro = db.Column(db.String(100), default='-')
+    work = db.Column(db.String(100))
+    college = db.Column(db.String(100))
+    phone = db.Column(db.String(15))
+
     posts = db.relationship('Post', backref='sender', lazy=True)
     rooms = db.relationship('Room', backref='creator', lazy=True)
 
@@ -35,7 +39,7 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"User('{self.firstName}','{self.lastName}','{self.email}'," \
-               f"'{self.password}','{self.image_file}','{self.intro}')"
+               f"'{self.password}','{self.image_file}','{self.intro}','{self.work}','{self.college}','{self.phone}')"
 
 
 class Post(db.Model):

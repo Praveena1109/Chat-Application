@@ -15,8 +15,7 @@ from flask_mail import Message
 @app.route("/")
 @app.route("/home")
 def home():
-    posts = Post.query.order_by(Post.date_send.desc()).paginate()
-    return render_template('home.html', title='Home', posts=posts)
+    return render_template('home.html', title='Home')
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -100,7 +99,7 @@ def reset_password(token):
     return render_template('reset_password.html', title='reset password', form=form)
 
 
-@app.route("/post/new", methods=['GET', 'POST'])
+@app.route("/posts", methods=['GET', 'POST'])
 @login_required
 def new_post():
     form = PostForm()
@@ -109,19 +108,14 @@ def new_post():
         db.session.add(new_post)
         db.session.commit()
         flash('Posted', 'success')
-        return redirect(url_for('home'))
-    return render_template('create_post.html', title='Post', form=form, legend='New post')
+        return redirect(url_for('new_post'))
+    posts = Post.query.order_by(Post.date_send.desc()).paginate()
+    return render_template('all_post.html', title='Post', legend='New post', posts=posts, form=form)
 
 
-@app.route("/post/<int:post_id>")
-def post(post_id):
-    post = Post.query.get_or_404(post_id)
-    return render_template('post.html', title=post.title, post=post)
-
-
-@app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
+@app.route("/post/<int:post_id>", methods=['GET', 'POST'])
 @login_required
-def update_post(post_id):
+def post(post_id):
     post = Post.query.get_or_404(post_id)
     if post.sender != current_user:
         abort(403)
@@ -131,11 +125,11 @@ def update_post(post_id):
         post.information = form.information.data
         db.session.commit()
         flash('Post updated', 'success')
-        return redirect(url_for('home', post_id=post.id))
+        return redirect(url_for('new_post'))
     elif request.method == 'GET':
         form.title.data = post.title
         form.information.data = post.information
-    return render_template('create_post.html', title='Update post', form=form, legend='Update Post')
+    return render_template('post.html', post=post, form=form)
 
 
 @app.route("/post/<int:post_id>/delete", methods=['POST'])
@@ -147,7 +141,7 @@ def delete_post(post_id):
     db.session.delete(post)
     db.session.commit()
     flash('Post deleted', 'success')
-    return redirect(url_for('home'))
+    return redirect(url_for('new_post'))
 
 
 def save_picture(form_picture):
@@ -173,6 +167,9 @@ def account():
             picture_file = save_picture(form.picture.data)
             current_user.image_file = picture_file
         current_user.intro = form.intro.data
+        current_user.college = form.college.data
+        current_user.work = form.work.data
+        current_user.phone = form.phone.data
         current_user.firstName = form.firstName.data
         current_user.lastName = form.lastName.data
         current_user.email = form.email.data
@@ -184,6 +181,9 @@ def account():
         form.lastName.data = current_user.lastName
         form.email.data = current_user.email
         form.intro.data = current_user.intro
+        form.college.data = current_user.college
+        form.phone.data = current_user.phone
+        form.work.data = current_user.work
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title='Account', form=form, image_file=image_file)
 

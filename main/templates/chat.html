@@ -17,7 +17,7 @@
   </head>
   <body>
     <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+      <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
         <div class="container">
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -50,10 +50,10 @@
                         <p class="select-room cursor-pointer">{{ room.room_name|title }}</p>
                     {% endfor %}
                     <div class="btn-group-vertical">
-                        <button type="button" class="btn btn-info btn-sm m-1" data-toggle="modal" data-target="#modalCreateRoom">Create Room</button>
-                        <button type="button" class="btn btn-info btn-sm m-1" data-toggle="modal" data-target="#">Add Member</button>
-                        <a class="btn btn-info btn-sm m-1" href="{{ url_for('delete_room')}}">Delete Room</a>
-                        <button type="button" class="btn btn-info btn-sm m-1" data-toggle="modal" data-target="#">Check Members</button>
+                        <button type="button" class="btn btn-dark btn-sm m-1" data-toggle="modal" data-target="#modalCreateRoom">Create Room</button>
+                        <button type="button" class="btn btn-dark btn-sm m-1" data-toggle="modal" data-target="#">Add Member</button>
+                        <a class="btn btn-dark btn-sm m-1" href="{{ url_for('delete_room')}}">Delete Room</a>
+                        <button type="button" class="btn btn-dark btn-sm m-1" data-toggle="modal" data-target="#">Check Members</button>
                     </div>
                     <div class="modal fade" id="modalCreateRoom" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                       aria-hidden="true">
@@ -84,7 +84,7 @@
                                         </div>
                                     </fieldset>
                                     <div class="form-group">
-                                        {{ form.submit(class="btn btn-outline-info") }}
+                                        {{ form.submit(class="btn btn-dark") }}
                                     </div>
                                 </form>
                           </div>
@@ -99,7 +99,7 @@
                     <div id="input-area" class="input-group mb-3">
                         <input type="text" class="form-control" id="user-message" placeholder="Type here..." autocomplete="off" aria-label="Type a message" aria-describedby="basic-addon2">
                         <div>
-                            <button type="button" id="send_message" class="btn btn-success btn-secondary float-right">Send<i class="fas fa-paper-plane"></i></button>
+                            <button type="button" id="send_message" class="btn btn-dark btn-secondary float-right">Send</button>
                         </div>
                     </div>
                 </div>
