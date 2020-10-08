@@ -97,13 +97,13 @@ input[type=text]:focus{
 
 .others-msg {
     margin-right:7em;
-    margin-left: 1em;FFC107
+    margin-left: 1em;
     padding: 0.5em 0.5em 0.5em 1em;
     border-radius: 5px;
-    border-color: #B0AAA9;
+    border-color: grey;
     border-width: 0.5px;
     border-style: solid;
-    background-color: #B0AAA9;
+    background-color: #C2DBFB;
     /* animation */
     animation-name: fadeIn;
     animation-duration: 0.75s;
@@ -116,7 +116,7 @@ input[type=text]:focus{
     margin-right:1em;
     padding: 0.5em 0.5em 0.5em 1em;
     border-radius: 5px;
-    border-color: ##000000;
+    border-color: #206ED2;
     border-width: 1px;
     border-style: solid;
     /* animation */
@@ -142,16 +142,16 @@ input[type=text]:focus{
 .other-name {
     font-weight: bold;
     font-size: 1.1em;
-    color: #800080;
+    color: #206ED2;
 }
 
 .my-name {
     font-size: 1.1em;
-    color: #800080;
+    color: #FF6B13;
 }
 
 #msg-input {
-    border-color: #800080;
+    border-color: #ffc107;
     border-width: 5px;
 }
 
