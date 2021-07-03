@@ -15,7 +15,6 @@
     border-right: 0.5px solid #898c91;
 }
 
-
 #sidebar p {
     padding-left: 2em;
     padding-right:2em;
@@ -158,4 +157,3 @@ input[type=text]:focus{
 #get-name {
     display: none !important;
 }
-

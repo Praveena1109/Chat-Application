@@ -11,7 +11,6 @@ import secrets
 import os
 from flask_mail import Message
 
-
 @app.route("/")
 @app.route("/home")
 def home():
@@ -222,6 +221,17 @@ def delete_room():
             flash('This room does not exist', 'warning')
     return render_template('delete_room.html', title='Chat', form=form)
 
+@app.errorhandler(404)
+def error_404(error):
+    return render_template('errors/404.html'), 404
+
+@app.errorhandler(403)
+def error_403(error):
+    return render_template('errors/403.html'), 403
+
+@app.errorhandler(500)
+def error_500(error):
+    return render_template('errors/500.html'), 500
 
 @socketio.on('message')
 def message(data):
@@ -240,4 +250,3 @@ def join(data):
 def leave(data):
     leave_room(data['room'])
     send({'msg': data['name'] + " has left the " + data['room'] + " room!"}, room=data['room'])
-

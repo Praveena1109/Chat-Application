@@ -7,8 +7,10 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}"> -->
       <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='chat.css') }}">
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+
     {% if title %}
         <title>{{ title }}</title>
     {% else %}
@@ -51,9 +53,7 @@
                     {% endfor %}
                     <div class="btn-group-vertical">
                         <button type="button" class="btn btn-dark btn-sm m-1" data-toggle="modal" data-target="#modalCreateRoom">Create Room</button>
-                        <button type="button" class="btn btn-dark btn-sm m-1" data-toggle="modal" data-target="#">Add Member</button>
                         <a class="btn btn-dark btn-sm m-1" href="{{ url_for('delete_room')}}">Delete Room</a>
-                        <button type="button" class="btn btn-dark btn-sm m-1" data-toggle="modal" data-target="#">Check Members</button>
                     </div>
                     <div class="modal fade" id="modalCreateRoom" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                       aria-hidden="true">
