@@ -5,7 +5,6 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextA
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from main.models import User, Room
 
-
 class RegistrationForm(FlaskForm):
     firstName = StringField('First Name',
                             validators=[DataRequired(), Length(min=2, max=20)])
@@ -23,7 +22,6 @@ class RegistrationForm(FlaskForm):
         if user:
             raise ValidationError('This Email ID already has an account')
 
-
 class LoginForm(FlaskForm):
     email = StringField('Email Address',
                         validators=[DataRequired(), Email()])
@@ -31,7 +29,6 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
 
     submit = SubmitField('Log In')
-
 
 class UpdateForm(FlaskForm):
     firstName = StringField('First Name',
@@ -54,12 +51,10 @@ class UpdateForm(FlaskForm):
             if user:
                 raise ValidationError('This Email ID already has an account')
 
-
 class PostForm(FlaskForm):
     title = TextAreaField('Title', validators=[DataRequired()])
     information = TextAreaField('Information', validators=[DataRequired()])
     submit = SubmitField('Post')
-
 
 class RequestResetForm(FlaskForm):
     email = StringField('Email Address',
@@ -71,18 +66,15 @@ class RequestResetForm(FlaskForm):
         if user is None:
             raise ValidationError('This email id does not have an account')
 
-
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('New Password', validators=[DataRequired()])
     confirmPassword = PasswordField('Confirm New Password',
                                     validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Reset Password')
 
-
 class CreateRoomForm(FlaskForm):
     room_name = StringField('Room Name', validators=[DataRequired()])
     submit = SubmitField('Add')
-
 
 class DeleteRoomForm(FlaskForm):
     room_name = StringField('Room Name', validators=[DataRequired()])
