@@ -58,7 +58,7 @@ def logout():
 
 def send_email(user):
     token = user.get_reset_token()
-    msg = Message('Password Reset Request', sender='os.environ.get('USERNAME')', recipients=[user.email])
+    msg = Message('Password Reset Request', sender='noreply@demo.com', recipients=[user.email])
     msg.body = f'''To reset your password, visit the following link:
 {url_for('reset_password', token=token, _external=True)}
 
